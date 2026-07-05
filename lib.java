@@ -29,8 +29,8 @@ public class lib {
 			long tamanhoArquivo = fileInputStream.getChannel().size();
 
 			int numShorts = (int) (tamanhoArquivo / 2);
-			instrucaoMemoria = new short(numShorts);
-			dadosMemoria = new short(numShorts);
+			instrucaoMemoria = new short[numShorts];
+			dadosMemoria = new short[numShorts];
 
 
 			for (int i = 0; i < numShorts; i++) {
