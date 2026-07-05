@@ -30,7 +30,7 @@ public class lib {
 
 			int numShorts = (int) (tamanhoArquivo / 2);
 			instrucaoMemoria = new short[numShorts];
-			dadosMemoria = new short[numShorts];
+			dadosMemoria = new short[256];
 
 
 			for (int i = 0; i < numShorts; i++) {
