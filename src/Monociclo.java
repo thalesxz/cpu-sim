@@ -14,7 +14,7 @@ public class Monociclo{
 
         short[] instrucao = decodificarInstrucao(instrucaoAtual);
 
-        operacoesUla(instrucao);
+        execucaoInstrucao(instrucao);
 
         programaContador++;
      }
@@ -43,8 +43,26 @@ public class Monociclo{
         }
     }
 
-    public static void operacoesUla(short[] instrucao){
-        
+    public static void execucaoInstrucao(short[] instrucao){
+        if(instrucao[0] == 0){
+            switch(instrucao[1]){
+                case 0:
+                add(instrucao[2], instrucao[3], instrucao[4]);
+                case 1: 
+                sub(instrucao[2], instrucao[3], instrucao[4]);
+                case 2:
+                mul(instrucao[2], instrucao[3], instrucao[4]);
+                
+            }
+    }
+    public static void add(short destino, short operando1, short operando2){
+        registradores[destino] = (short) (registradores[operando1] + registradores[operando2]);
+    }
+    public static void sub(short destino, short operando1, short operando2){
+        registradores[destino] = (short) (registradores[operando1] - registradores[operando2]);
+    }
+    public static void mul(short destino, short operando1, short operando2){
+        registradores[destino] = (short) (registradores[operando1] * registradores[operando2]);
     }
     
 }
