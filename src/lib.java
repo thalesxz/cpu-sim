@@ -3,9 +3,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class lib {
-	static short[] instrucaoMemoria;
-	static short[] dadosMemoria;
-
+	short [] memoria;
 	public short extract_bits (short value, int bstart, int blength)
 	{
 		short mask = (short)((1 << blength) - 1);
@@ -13,11 +11,7 @@ public class lib {
 	}
 
 	public void memory_write (short addr, short value){
-		instrucaoMemoria[addr] = value;
-	}
-
-	public short[] get_dado_Memoria(){
-		return dadosMemoria;
+		memoria[addr] = value;
 	}
 
 	short[] load_binary (String binary_name)
@@ -27,10 +21,8 @@ public class lib {
 			DataInputStream dataInputStream = new DataInputStream(fileInputStream);
 
 			long tamanhoArquivo = fileInputStream.getChannel().size();
-
 			int numShorts = (int) (tamanhoArquivo / 2);
-			instrucaoMemoria = new short[numShorts];
-			dadosMemoria = new short[256];
+			memoria = new short[numShorts];
 
 
 			for (int i = 0; i < numShorts; i++) {
@@ -46,6 +38,6 @@ public class lib {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return instrucaoMemoria;
+		return memoria;
 	}
 }
