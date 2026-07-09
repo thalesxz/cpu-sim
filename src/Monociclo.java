@@ -1,6 +1,6 @@
 public class Monociclo{
-    static short[] memoria;                      // memoria de instrucao
-    static short[] registradores = new short[8]; // 8 registradores (3 para endereco bits)               // memoria de dados para store e load
+    static short[] memoria;                      // memoria de instrucao e dados
+    static short[] registradores = new short[8]; // 8 registradores (3 para endereco bits)               
     static int programaContador = 1;             // PC(endereco) qual instrucao e executada comecar sempre em 1
     static lib biblioteca = new lib();           // ler os bits, extrair bits, write memory...
 
