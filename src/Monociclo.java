@@ -16,7 +16,7 @@ public class Monociclo{
         short instrucaoAtual = buscarInstrucao();
         short[] instrucao = decodificarInstrucao(instrucaoAtual);
 
-        short[] antes = registradores.clone();      // snapshot antes de executar
+        short[] antes = registradores.clone();      // copia antes de executar
         execucaoInstrucao(instrucao);
 
         imprimirRegistradores(antes, enderecoExecutado);
