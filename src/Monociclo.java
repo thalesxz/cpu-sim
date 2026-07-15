@@ -3,20 +3,27 @@
 public class Monociclo{
     static short[] memoria;                      // memoria de instrucao e dados
     static short[] registradores = new short[8]; // 8 registradores (3 para endereco bits)               
-    static int programaContador = 1;             // PC(endereco) qual instrucao e executada comecar sempre em 1
+    static short programaContador = 1;             // PC(endereco) qual instrucao e executada comecar sempre em 1       
     static lib biblioteca = new lib();           // ler os bits, extrair bits, write memory...
+    static int quantidadeInstrucoes;
 
     public static void main(String[] args){
-	 memoria = biblioteca.load_binary("C:/Users/User/Downloads/bin/count.bin");
-     
-     while(programaContador < memoria.length){
+	 memoria = biblioteca.load_binary("C:/Users/55449/Desktop/cpu-sim/bin-program/espacomemoria.bin");
+
+     quantidadeInstrucoes = biblioteca.getQuantidadeInstrucoes();
+
+     while(programaContador < quantidadeInstrucoes){
         
         int enderecoExecutado = programaContador;  // guarda ANTES, pois jump/jump_cond mudam programaContador
 
         short instrucaoAtual = buscarInstrucao();
-        short[] instrucao = decodificarInstrucao(instrucaoAtual);
+
+        imprimirInstrucao(instrucaoAtual);
 
         short[] antes = registradores.clone();      // copia antes de executar
+
+        short[] instrucao = decodificarInstrucao(instrucaoAtual);
+
         execucaoInstrucao(instrucao);
 
         imprimirRegistradores(antes, enderecoExecutado);
@@ -123,6 +130,10 @@ public class Monociclo{
         registradores[registrador] = imediato; 
     }
     public static void div(short destino, short operando1, short operando2){
+        if(registradores[operando2] == 0){
+            System.out.println("Erro: divisão por 0");
+            return;
+        }
         registradores[destino] = (short) (registradores[operando1] / registradores[operando2]);
     }
     public static void cmp_equal(short destino, short operando1, short operando2){
@@ -141,22 +152,41 @@ public class Monociclo{
         }
     }
     public static void load(short destino, short operando1){
-        registradores[destino] = memoria[registradores[operando1]];
+        int endereco = registradores[operando1];
+
+        if(endereco < 0 || endereco >= memoria.length){
+            System.out.println("Endereco inválido");
+            return;
+        }
+
+        registradores[destino] = memoria[endereco];
     }
     public static void store(short operando1, short operando2){
-        memoria[registradores[operando1]] = registradores[operando2];
+        int endereco = registradores[operando1];
+        if(endereco < 0 || endereco >= memoria.length){
+            System.out.println("Endereco inválido");
+            return;
+        }
+        
+        memoria[endereco] = registradores[operando2];
+
+        System.out.println("MEMORIA[" + endereco + "] = " + memoria[endereco]);
     }
     public static void jump(short imediato){
-        programaContador = imediato - 1;
+        programaContador =(short) (imediato - 1);
     }
     public static void jump_cond(short registrador, short imediato){
         if(registradores[registrador] == 1){
-            programaContador = imediato - 1;
+            programaContador = (short) (imediato - 1);
 
         }
     }
     public static void syscall(){
-        System.exit(0);
+        if(registradores[0] == 0){
+            System.exit(0);
+
+        }
+        System.out.println("Servico de syscall não implementado.");
 
     }
     public static void imprimirRegistradores(short[] antes, int pc){
@@ -168,5 +198,10 @@ public class Monociclo{
         sb.append("  ");
     }
     System.out.println(sb.toString());
-}
+    }
+
+    public static void imprimirInstrucao(short instrucao){
+    String binario =String.format("%16s",Integer.toBinaryString(instrucao & 0xFFFF)).replace(' ', '0');
+    System.out.println("Instrucao: " + binario);
+    }
 }

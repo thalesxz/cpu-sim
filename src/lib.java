@@ -3,7 +3,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class lib {
-	short [] memoria;
+	short [] memoria = new short[256];
+	int quantidadeInstrucoes;
+
+	
 	public short extract_bits (short value, int bstart, int blength)
 	{
 		short mask = (short)((1 << blength) - 1);
@@ -21,11 +24,9 @@ public class lib {
 			DataInputStream dataInputStream = new DataInputStream(fileInputStream);
 
 			long tamanhoArquivo = fileInputStream.getChannel().size();
-			int numShorts = (int) (tamanhoArquivo / 2);
-			memoria = new short[numShorts];
+			quantidadeInstrucoes = (int) (tamanhoArquivo / 2);
 
-
-			for (int i = 0; i < numShorts; i++) {
+			for (int i = 0; i < quantidadeInstrucoes; i++) {
 				int low = dataInputStream.readByte() & 0x000000FF;
 				int high = dataInputStream.readByte() & 0x000000FF;
 				int value = (low | (high << 8)) & 0x0000FFFF;
@@ -39,5 +40,8 @@ public class lib {
 			e.printStackTrace();
 		}
 		return memoria;
+	}
+	public int getQuantidadeInstrucoes(){
+		return quantidadeInstrucoes;
 	}
 }
